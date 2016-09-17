@@ -6,8 +6,33 @@ var mime	= require('mime');	// Provides ability to derive MIME type based on fil
 // Used to cache file data.
 var cache = {};
 
+// Creates the HTTP server.
+// Anonymous function defines per-request behavior.
+var server = http.createServer(function(request, response) {
+	var filePath = false;
+
+	// HTML file to be served by default.
+	if(request.url == '/') {
+		filePath = 'public/index.html';
+	}
+	
+	// Translate URL path to relative file path.
+	else {
+		filePath = 'public' + request.url;
+	}
+	
+	// Serve the static file.
+	var absPath = './' + filePath;
+	serveStatic(response, cache, absPath);
+});
+
+server.listen(3000, function() {
+	console.log("Server listening on port 3000.");	
+});
+
+// Helper functions.
 function send404(response) {
-		response.writeHead(
+	response.writeHead(
 				404, 
 				{'Content-Type': 'text/plain'});
 		response.write('Error 404: resource not found.');
