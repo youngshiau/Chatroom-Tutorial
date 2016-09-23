@@ -3,6 +3,8 @@ var fs		= require('fs');		// Provides filesystem related functionality.
 var path	= require('path');	// Provides filesystem path-related functionality.
 var mime	= require('mime');	// Provides ability to derive MIME type based on filename extension.
 
+var chatServer = require('./lib/chat_server.js');
+
 // Used to cache file data.
 var cache = {};
 
@@ -29,6 +31,11 @@ var server = http.createServer(function(request, response) {
 server.listen(3000, function() {
 	console.log("Server listening on port 3000.");	
 });
+
+chatServer.listen(server);
+
+
+
 
 // Helper functions.
 function send404(response) {
